@@ -16,6 +16,25 @@ model_select = function(covariates, responses, cutoff){
   summary(model2)$coefficients[,4]
 }
 
+challenge_model_select = function(covariates,response,cutoff){
+  #Arbitrarily decide to use half the data for modeling
+  selection=sample(length(response),floor(length(response)*0.5))
+  model.cov=covariates[selection,]
+  model.res=response[selection]
+  model=lm(model.res ~ model.cov)
+  pvals = summary(model)$coefficients[,4]
+  keep=which(pvals<cutoff)-1
+  keep=keep[keep!=0]
+  if(length(keep)==0){
+    return(c())
+  }
+  #Now use other half for p-values
+  pval.cov=covariates[-selection,]
+  pval.res=response[-selection]
+  model2=lm(pval.res ~ pval.cov[,keep])
+  summary(model2)$coefficients[,4]
+}
+
 run_simulation = function(n_trials,n,p,cutoff){
   res=numeric()
   if(n_trials==1){return(res)}
