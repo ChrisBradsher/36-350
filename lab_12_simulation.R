@@ -24,16 +24,10 @@ run_simulation = function(n_trials,n,p,cutoff){
     model=model_select(data[[1]],data[[2]],cutoff)
     res=c(res,model)
   }
-  print(res)
-  hist(res)
+  write(res,file=paste("l12datan_trials",n_trials,"n",n,"p",p,"cutoff",cutoff,".txt",sep=""),ncolumns=1)
 }
-run_simulation(100,100,10,0.05)
-run_simulation(100,1000,10,0.05)
-run_simulation(100,10000,10,0.05)
-run_simulation(100,100,20,0.05)
-run_simulation(100,1000,20,0.05)
-run_simulation(100,10000,20,0.05)
-run_simulation(100,100,50,0.05)
-run_simulation(100,1000,50,0.05)
-run_simulation(100,10000,50,0.05)
-#They are not uniformly distributed. Hopefully they weren't supposed to be.
+
+make_plot = function(datapath){
+  file=scan(datapath)
+  hist(file)
+}
